@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عقل محيّر - اختبار العبقرية المزيف</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --dark: #292F36;
+            --light: #F7FFF7;
+            --background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            --card-bg: white;
+            --text-color: #292F36;
+            --option-bg: #f5f5f5;
+            --option-hover: #FFE66D;
+            --shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] {
+            --background: linear-gradient(135deg, #1a1c20 0%, #2c3e50 100%);
+            --card-bg: #2d3748;
+            --text-color: #e2e8f0;
+            --option-bg: #4a5568;
+            --option-hover: #667eea;
+            --shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--background);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .screen {
+            display: none;
+            padding: 30px;
+        }
+        
+        #start-screen {
+            display: block;
+            text-align: center;
+        }
+        
+        .welcome-text {
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .question-container {
+            margin-bottom: 25px;
+        }
+        
+        .question-number {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+        
+        .question-image {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+        
+        .options {
+            display: grid;
+            grid-gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            padding: 15px 20px;
+            background-color: var(--option-bg);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .option:hover {
+            background-color: var(--option-hover);
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background-color: var(--secondary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .progress-container {
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .result {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .iq-score {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-message {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+        
+        .result-description {
+            line-height: 1.6;
+            margin-bottom: 30px;
+            background-color: var(--option-bg);
+            padding: 20px;
+            border-radius: 15px;
+            border-right: 5px solid var(--accent);
+        }
+        
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .share-btn {
+            padding: 12px 25px;
+            background-color: #3b5998;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .share-btn.twitter {
+            background-color: #1da1f2;
+        }
+        
+        .share-btn.whatsapp {
+            background-color: #25d366;
+        }
+        
+        .share-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .animation-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .feedback-message {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            background-color: var(--option-bg);
+            display: none;
+        }
+        
+        .feedback-positive {
+            background-color: #4ECDC4;
+            color: white;
+        }
+        
+        .feedback-negative {
+            background-color: #FF6B6B;
+            color: white;
+        }
+        
+        .leaderboard {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--option-bg);
+            border-radius: 15px;
+        }
+        
+        .leaderboard h3 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+        
+        .customization-panel {
+            position: absolute;
+            top: 70px;
+            left: 20px;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 99;
+            display: none;
+        }
+        
+        .customization-panel h4 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .font-option {
+            padding: 8px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            background-color: var(--option-bg);
+        }
+        
+        .font-option:hover {
+            background-color: var(--option-hover);
+        }
+        
+        #loading-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--background);
+            z-index: 1000;
+            color: white;
+        }
+        
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 5px solid var(--accent);
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        @keyframes flip {
+            0% { transform: rotateY(0); }
+            50% { transform: rotateY(180deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        .flip {
+            animation: flip 1s;
+        }
+        
+        .celebrate {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .question {
+                font-size: 1.3rem;
+            }
+            
+            .iq-score {
+                font-size: 3rem;
+            }
+            
+            .result-message {
+                font-size: 1.5rem;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+            
+            .share-buttons {
+                flex-direction: column;
+            }
+            
+            .theme-toggle {
+                top: 10px;
+                left: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <h2>جاري تحميل اختبار العبقرية المزيف...</h2>
+        <p>يرجى الانتظار بينما نجهل أسئلتنا الغبية!</p>
+    </div>
+
+    <div class="container">
+        <button class="theme-toggle" id="theme-toggle">
+            <i class="fas fa-moon"></i>
+        </button>
+        
+        <button class="theme-toggle" id="settings-toggle" style="left: 70px;">
+            <i class="fas fa-cog"></i>
+        </button>
+        
+        <div class="customization-panel" id="customization-panel">
+            <h4>تخصيص المظهر</h4>
+            <div class="font-option" onclick="changeFont('Cairo')">خط القاهرة</div>
+            <div class="font-option" onclick="changeFont('Arial')">خط Arial</div>
+            <div class="font-option" onclick="changeFont('Tahoma')">خط Tahoma</div>
+            <div class="font-option" onclick="changeFont('Courier New')">خط Courier New</div>
+        </div>
+        
+        <header>
+            <div class="logo">🧠</div>
+            <h1>عقل محيّر</h1>
+            <p class="subtitle">اختبار العبقرية المزيف - اكتشف "ذكاءك" الحقيقي!</p>
+        </header>
+        
+        <div id="start-screen" class="screen">
+            <div class="welcome-text">
+                <h2>مرحبًا بك في اختبار العبقرية المزيف!</h2>
+                <p>هذا الاختبار المميز سيحدد بدقة مذهلة مستوى ذكائك الحقيقي... أو هكذا ندعي!</p>
+                <p>سيتم عرض 10 أسئلة غامضة، حاول الإجابة عليها بأفضل ما يمكنك.</p>
+                <p>لكن احذر، فالأمر ليس كما يبدو!</p>
+            </div>
+            <div class="animation-container">
+                <i class="fas fa-brain" style="font-size: 4rem; color: #4ECDC4;"></i>
+            </div>
+            <button class="btn" onclick="startTest()">
+                <i class="fas fa-play"></i> ابدأ الاختبار
+            </button>
+            
+            <div class="leaderboard" id="local-leaderboard">
+                <h3>أعلى النتائج المحلية</h3>
+                <div id="leaderboard-content"></div>
+            </div>
+        </div>
+        
+        <div id="test-screen" class="screen">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progress-bar"></div>
+                </div>
+                <div class="question-number" id="question-number">السؤال 1 من 10</div>
+            </div>
+            
+            <div class="question-container">
+                <div class="question" id="question"></div>
+                <img id="question-image" class="question-image" style="display:none;">
+                <div class="options" id="options"></div>
+            </div>
+            
+            <div class="feedback-message" id="feedback-message"></div>
+            
+            <div class="navigation">
+                <button class="btn" id="prev-btn" onclick="prevQuestion()">
+                    <i class="fas fa-arrow-right"></i> السابق
+                </button>
+                <button class="btn" id="next-btn" onclick="nextQuestion()">
+                    التالي <i class="fas fa-arrow-left"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div id="result-screen" class="screen">
+            <div class="result">
+                <div class="celebrate">🎉</div>
+                <h2>تهانينا! لقد أكملت الاختبار</h2>
+                <div class="iq-score" id="iq-score">0%</div>
+                <div class="result-message" id="result-message"></div>
+            </div>
+            
+            <div class="result-description" id="result-description"></div>
+            
+            <div id="shareable-container" style="display:none;">
+                <canvas id="shareable-canvas" width="800" height="400"></canvas>
+            </div>
+            
+            <button class="btn" onclick="generateShareableImage()">
+                <i class="fas fa-image"></i> إنشاء صورة للنتيجة
+            </button>
+            
+            <button class="btn" onclick="restartTest()">
+                <i class="fas fa-redo"></i> اختبر مرة أخرى
+            </button>
+            
+            <div class="share-buttons">
+                <button class="share-btn" onclick="shareResult('facebook')">
+                    <i class="fab fa-facebook-f"></i> فيسبوك
+                </button>
+                <button class="share-btn twitter" onclick="shareResult('twitter')">
+                    <i class="fab fa-twitter"></i> تويتر
+                </button>
+                <button class="share-btn whatsapp" onclick="shareResult('whatsapp')">
+                    <i class="fab fa-whatsapp"></i> واتساب
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <!-- استيراد ملف قاعدة البيانات المنفصل -->
+    <script src="db.js"></script>
+    <script>
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let score = 0;
+        let leaderboard = [];
+
+        // عناصر DOM
+        const startScreen = document.getElementById('start-screen');
+        const testScreen = document.getElementById('test-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const questionElement = document.getElementById('question');
+        const questionImage = document.getElementById('question-image');
+        const optionsElement = document.getElementById('options');
+        const progressBar = document.getElementById('progress-bar');
+        const questionNumber = document.getElementById('question-number');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const iqScore = document.getElementById('iq-score');
+        const resultMessage = document.getElementById('result-message');
+        const resultDescription = document.getElementById('result-description');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const themeToggle = document.getElementById('theme-toggle');
+        const settingsToggle = document.getElementById('settings-toggle');
+        const customizationPanel = document.getElementById('customization-panel');
+        const leaderboardContent = document.getElementById('leaderboard-content');
+        const loadingScreen = document.getElementById('loading-screen');
+
+        // تحميل لوحة الصدارة من localStorage
+        function loadLeaderboard() {
+            const savedLeaderboard = localStorage.getItem('stupidTestLeaderboard');
+            if (savedLeaderboard) {
+                leaderboard = JSON.parse(savedLeaderboard);
+                updateLeaderboardDisplay();
+            }
+        }
+
+        // حفظ النتيجة في لوحة الصدارة
+        function saveToLeaderboard(score) {
+            const username = prompt("أدخل اسمك لحفظ نتيجك في لوحة الصدارة المحلية:") || "مجهول";
+            leaderboard.push({ name: username, score: score, date: new Date().toLocaleDateString() });
+            
+            // ترتيب اللوحة تنازلياً حسب النتيجة
+            leaderboard.sort((a, b) => b.score - a.score);
+            
+            // الاحتفاظ بأفضل 5 نتائج فقط
+            if (leaderboard.length > 5) {
+                leaderboard = leaderboard.slice(0, 5);
+            }
+            
+            localStorage.setItem('stupidTestLeaderboard', JSON.stringify(leaderboard));
+            updateLeaderboardDisplay();
+        }
+
+        // تحديث عرض لوحة الصدارة
+        function updateLeaderboardDisplay() {
+            leaderboardContent.innerHTML = '';
+            if (leaderboard.length === 0) {
+                leaderboardContent.innerHTML = '<p>لا توجد نتائج مسجلة بعد</p>';
+                return;
+            }
+            
+            leaderboard.forEach((item, index) => {
+                const leaderboardItem = document.createElement('div');
+                leaderboardItem.className = 'leaderboard-item';
+                leaderboardItem.innerHTML = `
+                    <span>${index + 1}. ${item.name}</span>
+                    <span>${item.score}% (${item.date})</span>
+                `;
+                leaderboardContent.appendChild(leaderboardItem);
+            });
+        }
+
+        // تبديل الوضع الداكن/الفاتح
+        themeToggle.addEventListener('click', () => {
+            document.body.setAttribute('data-theme', 
+                document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+            
+            themeToggle.innerHTML = document.body.getAttribute('data-theme') === 'dark' ? 
+                '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        });
+
+        // تبديل لوحة التخصيص
+        settingsToggle.addEventListener('click', () => {
+            customizationPanel.style.display = customizationPanel.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // تغيير خط الكتابة
+        function changeFont(font) {
+            document.body.style.fontFamily = font;
+            customizationPanel.style.display = 'none';
+        }
+
+        // بدء الاختبار
+        function startTest() {
+            // اختيار 10 أسئلة عشوائية من قاعدة البيانات
+            currentQuestions = getRandomQuestions(10);
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            score = 0;
+            
+            startScreen.style.display = 'none';
+            testScreen.style.display = 'block';
+            resultScreen.style.display = 'none';
+            
+            showQuestion();
+        }
+
+        // الحصول على أسئلة عشوائية
+        function getRandomQuestions(n) {
+            const shuffled = [...questionsDB].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, n);
+        }
+
+        // معالجة الأسئلة الديناميكية
+        function processDynamicQuestion(question) {
+            if (question.type === 'dynamic') {
+                const X = Math.floor(Math.random() * (question.variables.X.max - question.variables.X.min + 1)) + question.variables.X.min;
+                const Y = Math.floor(Math.random() * (question.variables.Y.max - question.variables.Y.min + 1)) + question.variables.Y.min;
+                const Z = X - Y;
+                
+                // استبدال المتغيرات في السؤال
+                question.question = question.template.replace('X', X).replace('Y', Y);
+                
+                // استبدال المتغيرات في الخيارات
+                question.options = question.options.map(opt => {
+                    if (opt === 'X') return X;
+                    if (opt === 'Y') return Y;
+                    if (opt === 'Z') return Z;
+                    if (opt === 'X - Y') return `${X - Y}`;
+                    if (opt === 'Y - X') return `${Y - X}`;
+                    return opt;
+                });
+                
+                // تحديث الشرح
+                question.explanation = question.explanation.replace('X - Y', `${X - Y}`);
+            }
+            return question;
+        }
+
+        // عرض السؤال الحالي
+        function showQuestion() {
+            let question = currentQuestions[currentQuestionIndex];
+            question = processDynamicQuestion(question);
+            
+            const progress = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+            
+            progressBar.style.width = progress + '%';
+            questionNumber.textContent = `السؤال ${currentQuestionIndex + 1} من ${currentQuestions.length} (${question.category})`;
+            questionElement.textContent = question.question;
+            
+            // إظهار الصورة إذا كان السؤال يحتوي على صورة
+            if (question.image) {
+                questionImage.src = question.image;
+                questionImage.style.display = 'block';
+            } else {
+                questionImage.style.display = 'none';
+            }
+            
+            optionsElement.innerHTML = '';
+            
+            if (question.type === 'text') {
+                // سؤال كتابي
+                const inputElement = document.createElement('input');
+                inputElement.type = 'text';
+                inputElement.placeholder = 'اكتب إجابتك هنا...';
+                inputElement.style.width = '100%';
+                inputElement.style.padding = '15px';
+                inputElement.style.borderRadius = '12px';
+                inputElement.style.border = '2px solid #ddd';
+                inputElement.style.fontSize = '1.2rem';
+                inputElement.style.fontFamily = 'inherit';
+                
+                if (userAnswers[currentQuestionIndex] !== undefined) {
+                    inputElement.value = userAnswers[currentQuestionIndex];
+                }
+                
+                inputElement.addEventListener('input', (e) => {
+                    userAnswers[currentQuestionIndex] = e.target.value;
+                });
+                
+                optionsElement.appendChild(inputElement);
+            } else {
+                // سؤال اختيار من متعدد
+                question.options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option';
+                    if (userAnswers[currentQuestionIndex] === index) {
+                        optionElement.classList.add('selected');
+                    }
+                    optionElement.textContent = option;
+                    optionElement.onclick = () => selectOption(index);
+                    optionsElement.appendChild(optionElement);
+                });
+            }
+            
+            // إخفاء رسالة التغذية الراجعة
+            feedbackMessage.style.display = 'none';
+            
+            // تحديث حالة أزرار التنقل
+            prevBtn.style.display = currentQuestionIndex === 0 ? 'none' : 'block';
+            nextBtn.textContent = currentQuestionIndex === currentQuestions.length - 1 ? 'انهاء الاختبار' : 'التالي';
+        }
+
+        // اختيار إجابة
+        function selectOption(optionIndex) {
+            userAnswers[currentQuestionIndex] = optionIndex;
+            
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            options[optionIndex].classList.add('selected');
+            
+            // إظهار تغذية راجعة فورية
+            showFeedback(optionIndex);
+        }
+
+        // عرض التغذية الراجعة
+        function showFeedback(selectedOption) {
+            const question = currentQuestions[currentQuestionIndex];
+            const feedbacks = selectedOption === 0 ? question.feedback.positive : question.feedback.negative;
+            const randomFeedback = feedbacks[Math.floor(Math.random() * feedbacks.length)];
+            
+            feedbackMessage.textContent = randomFeedback;
+            feedbackMessage.className = 'feedback-message ' + (selectedOption === 0 ? 'feedback-positive' : 'feedback-negative');
+            feedbackMessage.style.display = 'block';
+            
+            // إضافة تأثير اهتزاز للإجابات الخاطئة
+            if (selectedOption !== 0) {
+                feedbackMessage.classList.add('animate__animated', 'animate__headShake');
+                setTimeout(() => {
+                    feedbackMessage.classList.remove('animate__animated', 'animate__headShake');
+                }, 1000);
+            } else {
+                feedbackMessage.classList.add('animate__animated', 'animate__tada');
+                setTimeout(() => {
+                    feedbackMessage.classList.remove('animate__animated', 'animate__tada');
+                }, 1000);
+            }
+        }
+
+        // الانتقال إلى السؤال التالي
+        function nextQuestion() {
+            if (userAnswers[currentQuestionIndex] === undefined && currentQuestions[currentQuestionIndex].type !== 'text') {
+                alert('يرجى اختيار إجابة للمتابعة');
+                return;
+            }
+            
+            if (currentQuestionIndex < currentQuestions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion();
+            } else {
+                calculateResult();
+            }
+        }
+
+        // العودة إلى السؤال السابق
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        }
+
+        // حساب النتيجة
+        function calculateResult() {
+            // في هذا التطبيق، كل الإجابات خاطئة بشكل مسبق!
+            // ولكننا نعطي نتائج عشوائية منخفضة مع تعليقات فكاهية
+            
+            score = Math.floor(Math.random() * 30); // دائمًا أقل من 30!
+            
+            let message = "";
+            if (score < 10) {
+                message = "مذهل! ذكاؤك أقل من نبات صبار!";
+            } else if (score < 20) {
+                message = "رائع! لقد تفوقت على الحجر في اختبار الذكاء!";
+            } else {
+                message = "مدهش! ذكاؤك يقارن بذكاء دجاجة!";
+            }
+            
+            iqScore.textContent = `${score}%`;
+            resultMessage.textContent = message;
+            
+            let details = "<h3>تحليل إجاباتك العبقرية:</h3><ul>";
+            currentQuestions.forEach((q, index) => {
+                details += `<li><strong>السؤال ${index + 1}:</strong> ${q.explanation}</li>`;
+            });
+            details += "</ul>";
+            
+            resultDescription.innerHTML = details;
+            
+            testScreen.style.display = 'none';
+            resultScreen.style.display = 'block';
+            
+            // حفظ النتيجة في لوحة الصدارة
+            saveToLeaderboard(score);
+        }
+
+        // إعادة开始 الاختبار
+        function restartTest() {
+            startScreen.style.display = 'block';
+            testScreen.style.display = 'none';
+            resultScreen.style.display = 'none';
+        }
+
+        // مشاركة النتيجة
+        function shareResult(platform) {
+            const shareText = `لقد حصلت على نسبة ذكاء ${score}% في اختبار العقل المحيّر! جرب أنت أيضًا: ${window.location.href}`;
+            
+            let url = "";
+            switch(platform) {
+                case 'facebook':
+                    url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(shareText)}`;
+                    break;
+                case 'twitter':
+                    url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+                    break;
+                case 'whatsapp':
+                    url = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+                    break;
+            }
+            
+            window.open(url, '_blank');
+        }
+
+        // إنشاء صورة قابلة للمشاركة
+        function generateShareableImage() {
+            const shareableContainer = document.getElementById('shareable-container');
+            shareableContainer.style.display = 'block';
+            
+            const canvas = document.getElementById('shareable-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // رسم خلفية الصورة
+            ctx.fillStyle = '#6a11cb';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // إضافة تدرج لوني
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#6a11cb');
+            gradient.addColorStop(1, '#2575fc');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // إضافة نص النتيجة
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 40px Cairo';
+            ctx.textAlign = 'center';
+            ctx.fillText('شهادة ذكاء مزيفة', canvas.width / 2, 60);
+            
+            ctx.font = '30px Cairo';
+            ctx.fillText('لقد حصلت على نسبة ذكاء:', canvas.width / 2, 120);
+            
+            ctx.font = 'bold 80px Cairo';
+            ctx.fillText(`${score}%`, canvas.width / 2, 200);
+            
+            ctx.font = '25px Cairo';
+            ctx.fillText(resultMessage.textContent, canvas.width / 2, 250);
+            
+            ctx.font = '20px Cairo';
+            ctx.fillText('شارك هذه النتيجة المذهلة مع أصدقائك!', canvas.width / 2, 350);
+            
+            // تحويل Canvas إلى صورة وعرضها للتحميل
+            const dataUrl = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = 'شهادة-ذكاء-مزيفة.png';
+            link.href = dataUrl;
+            link.click();
+            
+            shareableContainer.style.display = 'none';
+        }
+
+        // تهيئة التطبيق عند تحميل الصفحة
+        window.onload = function() {
+            // محاكاة تحميل البيانات
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                loadLeaderboard();
+            }, 2000);
+        };
+    </script>
+</body>
+</html>
